@@ -2,13 +2,27 @@
 
 if [ $# -eq 0 ]
   then
-    echo "No arguments supplied"
+    echo -e "No arguments supplied\n"
+    echo -e "Usage: later xxxx,yyyy"
+    echo -e "where x = title, y = description"
     exit 1
 fi
-osascript -- - "$1" "$2" <<'EOF'
+
+# The array should have two fields, the title [0] and the description [1].
+IFS=',' read -r -a array <<< "$@"
+
+osascript -- - "${array[0]}" "${array[1]}" <<'EOF'
   on run(argv)
     tell application "Reminders"                                                                                                  
         make new reminder with properties {name:item 1 of argv, body:item 2 of argv}                                             
     end tell     
   end
 EOF
+
+# KEEP
+# -----------------------------------------------------------------------------
+#for index in "${!array[@]}"
+# do
+#     echo "$index ${array[index]}"
+# done
+
