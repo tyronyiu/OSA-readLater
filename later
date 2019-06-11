@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+    exit 1
+fi
+osascript -- - "$1" "$2" <<'EOF'
+  on run(argv)
+    tell application "Reminders"                                                                                                  
+        make new reminder with properties {name:item 1 of argv, body:item 2 of argv}                                             
+    end tell     
+  end
+EOF
